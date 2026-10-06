@@ -1,0 +1,30 @@
+<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Πολύγωνο ή όχι;</title><style>
+body{font-family:Arial,sans-serif;background:#f5f8fc;color:#17365d;margin:0}.w{max-width:1050px;margin:auto;padding:18px}
+h1{text-align:center}.ins,.p{text-align:center;font-size:20px}.g{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.c{background:white;border:3px solid #c9d9ee;border-radius:16px;min-height:140px;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
+.c.sel{border-color:#17365d}.c.done{opacity:.25;pointer-events:none}.n{position:absolute;top:7px;left:9px;background:#eaf2fb;border-radius:50%;padding:7px 11px;font-weight:bold}
+svg{width:120px;height:100px}.z{display:grid;grid-template-columns:1fr 1fr;gap:16px}.zone{background:white;border:3px dashed #6d8fb3;border-radius:16px;padding:25px;text-align:center;font-size:24px;font-weight:bold;cursor:pointer}
+.f{margin-top:15px;background:white;border:2px solid #d9e2ec;border-radius:14px;padding:16px;text-align:center;font-size:20px;min-height:58px}
+.ok{background:#edf8ee}.try{background:#fff7e6}.fin{background:#eaf4ff;font-weight:bold}.btn{text-align:center;margin-top:12px}button{font-size:17px;padding:10px 16px;border:0;border-radius:10px;background:#17365d;color:white}
+@media(max-width:720px){.g{grid-template-columns:repeat(2,1fr)}}
+</style></head><body><div class="w"><h1>Πολύγωνο ή όχι;</h1>
+<div class="ins">Επίλεξε ένα σχήμα και μετά πάτησε την ομάδα στην οποία πιστεύεις ότι ανήκει.</div><div class="p" id="p"></div>
+<div class="g" id="g"></div><div class="z"><div class="zone" onclick="ans('p')">ΠΟΛΥΓΩΝΑ</div><div class="zone" onclick="ans('n')">ΔΕΝ ΕΙΝΑΙ ΠΟΛΥΓΩΝΑ</div></div>
+<div class="f" id="f">Διάλεξε ένα σχήμα για να ξεκινήσεις.</div><div class="btn"><button onclick="reset()">Ξανά από την αρχή</button></div></div>
+<script>
+const D=[
+['p','<polygon points="60,8 108,90 12,90" fill="#f5a3ad" stroke="#111" stroke-width="5"/>'],
+['p','<polygon points="20,18 103,28 91,89 8,78" fill="#bfe6c3" stroke="#111" stroke-width="5"/>'],
+['p','<polygon points="60,8 108,42 89,92 29,92 8,42" fill="#9fcaf1" stroke="#111" stroke-width="5"/>'],
+['p','<polygon points="10,15 108,15 108,90 62,55 10,90" fill="#d8b8ee" stroke="#111" stroke-width="5"/>'],
+['n','<polyline points="8,85 42,85 42,25 82,25 82,60 112,60" fill="none" stroke="#111" stroke-width="6"/>'],
+['n','<circle cx="60" cy="50" r="40" fill="#f7d6a3" stroke="#111" stroke-width="5"/>'],
+['n','<path d="M15 85 L15 18 L88 18 Q112 50 88 85 Z" fill="#bfe8e2" stroke="#111" stroke-width="5"/>'],
+['n','<polyline points="10,88 30,25 72,12 108,65" fill="none" stroke="#111" stroke-width="6"/>']];
+let s=null,k=0;
+function draw(){let g=document.getElementById('g');g.innerHTML='';D.forEach((d,i)=>{let c=document.createElement('div');c.className='c';c.id='c'+i;c.innerHTML='<span class="n">'+(i+1)+'</span><svg viewBox="0 0 120 100">'+d[1]+'</svg>';c.onclick=()=>sel(i);g.appendChild(c)});prog()}
+function sel(i){if(document.getElementById('c'+i).classList.contains('done'))return;document.querySelectorAll('.c').forEach(x=>x.classList.remove('sel'));s=i;document.getElementById('c'+i).classList.add('sel');msg('Τώρα επίλεξε «ΠΟΛΥΓΩΝΑ» ή «ΔΕΝ ΕΙΝΑΙ ΠΟΛΥΓΩΝΑ».','f')}
+function ans(a){if(s===null){msg('Πρώτα επίλεξε ένα σχήμα.','f try');return}if(D[s][0]===a){let c=document.getElementById('c'+s);c.classList.add('done');c.classList.remove('sel');k++;s=null;prog();if(k===8)msg('Μπράβο! Ανακάλυψες ποια σχήματα είναι πολύγωνα!','f fin');else msg('Σωστά! Διάλεξε το επόμενο σχήμα.','f ok')}else msg('Παρατήρησε ξανά: Είναι κλειστό; Αποτελείται μόνο από ευθύγραμμα τμήματα;','f try')}
+function msg(t,c){let f=document.getElementById('f');f.textContent=t;f.className=c}function prog(){document.getElementById('p').textContent=k+' / 8 σχήματα'}function reset(){s=null;k=0;draw();msg('Διάλεξε ένα σχήμα για να ξεκινήσεις.','f')}draw();
+</script></body></html>
